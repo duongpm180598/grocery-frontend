@@ -42,6 +42,8 @@ const Product = Loader(lazy(() => import('src/pages/product/Product')));
 
 const Category = Loader(lazy(() => import('src/pages/category/Category')));
 
+const Login = Loader(lazy(() => import('src/pages/login/Login')));
+
 // Components
 
 const Buttons = Loader(
@@ -89,6 +91,10 @@ const routes: PartialRouteObject[] = [
       {
         path: '/',
         element: <Overview />
+      },
+      {
+        path: 'login',
+        element: <Login />
       },
       {
         path: 'overview',
@@ -144,8 +150,7 @@ const routes: PartialRouteObject[] = [
       {
         path: 'categories',
         element: <Category />
-      },
-     
+      }
     ]
   },
   {
