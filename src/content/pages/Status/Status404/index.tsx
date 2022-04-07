@@ -1,4 +1,5 @@
 import {
+  Grid,
   Box,
   Card,
   Typography,
@@ -38,59 +39,68 @@ const ButtonSearch = styled(Button)(
 `
 );
 
-function Status404() {
-
+const Status404 = () => {
   return (
     <>
       <Helmet>
         <title>Status - 404</title>
       </Helmet>
       <MainContent>
-        <Container maxWidth="md">
-          <Box textAlign="center">
-            <img alt="404" height={180} src="/static/images/status/404.svg" />
-            <Typography variant="h2" sx={{ my: 2 }}>
-              The page you were looking for doesn't exist.
-            </Typography>
-            <Typography
-              variant="h4"
-              color="text.secondary"
-              fontWeight="normal"
-              sx={{ mb: 4 }}
-            >
-              It's on us, we moved the content to a different page. The search below should help!
-            </Typography>
-          </Box>
-          <Container maxWidth="sm">
-            <Card sx={{ textAlign: 'center', mt: 3, p: 4 }}>
-              <FormControl variant="outlined" fullWidth>
-                <OutlinedInputWrapper
-                  type="text"
-                  placeholder="Search terms here..."
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <ButtonSearch variant="contained" size="small">
-                        Search
-                      </ButtonSearch>
-                    </InputAdornment>
-                  }
-                  startAdornment={
-                    <InputAdornment position="start">
-                      <SearchTwoToneIcon />
-                    </InputAdornment>
-                  }
-                />
-              </FormControl>
-              <Divider sx={{ my: 4 }}>OR</Divider>
-              <Button href="/overview" variant="outlined">
-                Go to homepage
-              </Button>
-            </Card>
+        <Grid
+          container
+          spacing={0}
+          direction="column"
+          alignItems="center"
+          justifyContent="center"
+          style={{ minHeight: '100vh' }}
+        >
+          <Container maxWidth="md">
+            <Box textAlign="center">
+              <img alt="404" height={180} src="/static/images/status/404.svg" />
+              <Typography variant="h2" sx={{ my: 2 }}>
+                The page you were looking for doesn't exist.
+              </Typography>
+              <Typography
+                variant="h4"
+                color="text.secondary"
+                fontWeight="normal"
+                sx={{ mb: 4 }}
+              >
+                It's on us, we moved the content to a different page. The search
+                below should help!
+              </Typography>
+            </Box>
+            <Container maxWidth="sm">
+              <Card sx={{ textAlign: 'center', mt: 3, p: 4 }}>
+                <FormControl variant="outlined" fullWidth>
+                  <OutlinedInputWrapper
+                    type="text"
+                    placeholder="Search terms here..."
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <ButtonSearch variant="contained" size="small">
+                          Search
+                        </ButtonSearch>
+                      </InputAdornment>
+                    }
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <SearchTwoToneIcon />
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+                <Divider sx={{ my: 4 }}>OR</Divider>
+                <Button href="/overview" variant="outlined">
+                  Go to homepage
+                </Button>
+              </Card>
+            </Container>
           </Container>
-        </Container>
+        </Grid>
       </MainContent>
     </>
   );
-}
+};
 
 export default Status404;

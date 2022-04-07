@@ -13,7 +13,8 @@ import {
 import { Helmet } from 'react-helmet-async';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
+import { login, setLocalStorage } from 'src/api/auth';
 
 const MainContent = styled(Box)(
   ({ theme }) => `
@@ -29,12 +30,28 @@ const MainContent = styled(Box)(
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const handleOnClick = useCallback(
+  const handleNavigate = useCallback(
     () => navigate('/ticket', { replace: true }),
     [navigate]
   );
+  const [form, setForm] = React.useState({
+    email: '',
+    password: ''
+  });
+
+  const handleChangeForm = (formControl) => (event) => {
+    setForm({ ...form, [formControl]: event.target.value });
+  };
   const onSubmit = (event) => {
-    console.log(event);
+    event.preventDefault();
+    login(form)
+      .then((res) => {
+        if (res.data) {
+          setLocalStorage(res.data);
+          handleNavigate();
+        }
+      })
+      .catch((err) => {});
   };
 
   return (
@@ -56,20 +73,28 @@ const LoginPage = () => {
               <Typography variant="h3">
                 Hệ thống quản lý cửa hàng tạp hóa Duy Phát
               </Typography>
-              <FormControl variant="outlined" fullWidth>
-                <TextField required label="Tên đăng nhập" margin="normal" />
-              </FormControl>
-              <FormControl variant="outlined" fullWidth>
-                <TextField
-                  required
-                  type="password"
-                  label="Mật khẩu"
-                  margin="normal"
-                />
-              </FormControl>
-              <Button variant="outlined" type="submit" onClick={handleOnClick}>
-                Đăng nhập
-              </Button>
+              <form noValidate autoComplete="off" onSubmit={onSubmit}>
+                <FormControl variant="outlined" fullWidth>
+                  <TextField
+                    required
+                    label="Tên đăng nhập"
+                    margin="normal"
+                    onChange={handleChangeForm('email')}
+                  />
+                </FormControl>
+                <FormControl variant="outlined" fullWidth>
+                  <TextField
+                    required
+                    type="password"
+                    label="Mật khẩu"
+                    margin="normal"
+                    onChange={handleChangeForm('password')}
+                  />
+                </FormControl>
+                <Button variant="outlined" type="submit">
+                  Đăng nhập
+                </Button>
+              </form>
               <Divider sx={{ my: 4 }}>HOẶC</Divider>
               <Typography>
                 Nếu chưa có tài khoản đăng ký tại <Link href="/">đây</Link>

@@ -21,6 +21,7 @@ import {
 
 import { CryptoOrder, CryptoOrderStatus } from 'src/models/crypto_order';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import { getProductByBarcode } from 'src/api/product';
 
 interface RecentOrdersTableProps {
   className?: string;
@@ -55,8 +56,22 @@ const applyPagination = (
 };
 
 const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ cryptoOrders }) => {
+  const [filter, setFilter] = useState('');
+  const [products, setProducts] = useState();
+  const onChangeFilter = (event) => {
+    setFilter(event.target.value);
+  };
   const handleSearchProduct = (event) => {
-    console.log(event);
+    event.preventDefault();
+    if (filter) {
+      getProductByBarcode(filter)
+        .then((res) => {
+          setProducts(res);
+        })
+        .catch((error) => {});
+    } else {
+      setProducts(null);
+    }
   };
   const theme = useTheme();
   return (
@@ -64,14 +79,16 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ cryptoOrders }) => {
       <CardHeader
         action={
           <Box width={300}>
-            <FormControl fullWidth variant="outlined">
-              <TextField
-                id="outlined-basic"
-                label="Nhập mã sản phẩm"
-                variant="outlined"
-                onSubmitCapture={handleSearchProduct}
-              />
-            </FormControl>
+            <form noValidate onSubmit={handleSearchProduct}>
+              <FormControl fullWidth variant="outlined">
+                <TextField
+                  id="outlined-basic"
+                  label="Nhập mã sản phẩm"
+                  variant="outlined"
+                  onChange={onChangeFilter}
+                />
+              </FormControl>
+            </form>
           </Box>
         }
         title="Danh sách sản phẩm"
@@ -87,7 +104,7 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = ({ cryptoOrders }) => {
               <TableCell>Đơn vị</TableCell>
               <TableCell align="right">Số lượng</TableCell>
               <TableCell align="right">Giá bán</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

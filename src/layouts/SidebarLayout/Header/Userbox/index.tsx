@@ -1,6 +1,6 @@
-import { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 import {
   Avatar,
@@ -22,6 +22,7 @@ import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
 import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
 import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
+import { getLocalStorage, removeLocalStorage } from 'src/api/auth';
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -58,14 +59,17 @@ const UserBoxDescription = styled(Typography)(
 `
 );
 
-function HeaderUserbox() {
-
-  const user =
-  {
+const HeaderUserbox = () => {
+  const navigate = useNavigate();
+  const handleNavigate = useCallback(
+    () => navigate('/login', { replace: true }),
+    [navigate]
+  );
+  const [user, setUser] = useState({
     name: 'Catherine Pike',
-    avatar: '/static/images/avatars/1.jpg',
+    avatarUrl: '/static/images/avatars/1.jpg',
     jobtitle: 'Project Manager'
-  };
+  });
 
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -78,10 +82,20 @@ function HeaderUserbox() {
     setOpen(false);
   };
 
+  const logout = () => {
+    // removeLocalStorage();
+    handleNavigate();
+  };
+
+  useEffect(() => {
+    const currentUser = getLocalStorage();
+    setUser(JSON.parse(currentUser));
+  }, []);
+
   return (
     <>
       <UserBoxButton color="secondary" ref={ref} onClick={handleOpen}>
-        <Avatar variant="rounded" alt={user.name} src={user.avatar} />
+        <Avatar variant="rounded" alt={user.name} src={user.avatarUrl} />
         <Hidden mdDown>
           <UserBoxText>
             <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
@@ -108,7 +122,7 @@ function HeaderUserbox() {
         }}
       >
         <MenuUserBox sx={{ minWidth: 210 }} display="flex">
-          <Avatar variant="rounded" alt={user.name} src={user.avatar} />
+          <Avatar variant="rounded" alt={user.name} src={user.avatarUrl} />
           <UserBoxText>
             <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
             <UserBoxDescription variant="body2">
@@ -122,11 +136,7 @@ function HeaderUserbox() {
             <AccountBoxTwoToneIcon fontSize="small" />
             <ListItemText primary="My Profile" />
           </ListItem>
-          <ListItem
-            button
-            to="/dashboards/messenger"
-            component={NavLink}
-          >
+          <ListItem button to="/dashboards/messenger" component={NavLink}>
             <InboxTwoToneIcon fontSize="small" />
             <ListItemText primary="Messenger" />
           </ListItem>
@@ -141,7 +151,7 @@ function HeaderUserbox() {
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>
-          <Button color="primary" fullWidth>
+          <Button color="primary" fullWidth onClick={logout}>
             <LockOpenTwoToneIcon sx={{ mr: 1 }} />
             Sign out
           </Button>
@@ -149,6 +159,6 @@ function HeaderUserbox() {
       </Popover>
     </>
   );
-}
+};
 
 export default HeaderUserbox;

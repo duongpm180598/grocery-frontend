@@ -51,7 +51,6 @@ const applyPagination = (
   return cryptoOrders.slice(page * limit, page * limit + limit);
 };
 
-
 const CategoryTable: FC<any> = ({ categories }) => {
   const handleSearchProduct = (event) => {
     console.log(event);
@@ -104,7 +103,7 @@ const CategoryTable: FC<any> = ({ categories }) => {
               <TableCell>Loại sản phẩm</TableCell>
               <TableCell>Đơn vị</TableCell>
               <TableCell align="right">Số lượng</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
