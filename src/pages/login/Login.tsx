@@ -57,7 +57,7 @@ const LoginPage = () => {
   return (
     <>
       <Helmet>
-        <title>Đăng nhập</title>
+        <title>Đăng nhập - Tạp hóa Duy Phát</title>
       </Helmet>
       <MainContent>
         <Grid
